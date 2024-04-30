@@ -1,0 +1,13 @@
+[package]
+name = "set_ico"
+version = "1.0.0"
+edition = "2021"
+authors = ["keating55"]
+description = "A utility to setting ico ICONS for different extension files."
+repository = "https://github.com/Keating55/set_ico.git"
+readme = "README.md"
+license = "Apache"
+
+[dependencies]
+winreg = "0.52"
+clap = { version = "4", features = ["derive"] }
