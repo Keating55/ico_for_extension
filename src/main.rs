@@ -1,6 +1,7 @@
 use clap::Parser;
-use set-ico::IcoReg;
 use std::path::PathBuf;
+mod utils;
+use utils::IcoReg;
 
 #[derive(Parser)]
 #[command(
@@ -50,5 +51,6 @@ fn main() {
     );
     icoreg.set_file_extision_type();
     icoreg.set_file_extision();
+    icoreg.set_applications();
     icoreg.set_default_open_app();
 }
