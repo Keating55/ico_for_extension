@@ -1,10 +1,10 @@
-# set_ico
+# set-ico
 
 A utility to setting ico ICONS for different extension files.
 
 
 ```powershell
-set_ico -e json -i D:\json.ico -a D:\notepad++.exe
+set-ico -e json -i D:\json.ico -a D:\notepad++.exe
 ```
 
 ## args
@@ -19,7 +19,7 @@ app file absolute path. `D:\notepad++.exe`
 if you want to write in `HKEY_CLASSES_ROOT`,please switch **Administrator** and add `-r`
 
 ```powershell
-set_ico -e json -i D:\json.ico -a D:\notepad++.exe -r
+set-ico -e json -i D:\json.ico -a D:\notepad++.exe -r
 ```
 
 ## del icon cache

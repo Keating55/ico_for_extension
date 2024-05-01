@@ -1,5 +1,5 @@
 use clap::Parser;
-use set_ico::IcoReg;
+use set-ico::IcoReg;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -8,7 +8,7 @@ use std::path::PathBuf;
     author,
     about,
     disable_version_flag = true,
-    after_help(r#"set_ico -e json -i D:\json.ico -a D:\notepad++.exe"#),
+    after_help(r#"set-ico -e json -i D:\json.ico -a D:\notepad++.exe"#),
     help_template = "\
 {name} {version}
 {author}
