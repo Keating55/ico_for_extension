@@ -3,32 +3,25 @@
 A utility to setting ico ICONS for different extension files.
 
 
-
-write in  `HKEY_CURRENT_USER\Software\Classes` and `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\{ }\UserChoice`
 ```powershell
-
-set_ico -e "json" -i "D:\json.ico" -a "D:\notepad++.exe" -p "Applications\notepad++.exe"
-
-```
-write in `HKEY_CLASSES_ROOT` and `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\{ }\UserChoice`
-
-```powershell
-set_ico -e "json" -i "D:\file.ico" -a "D:\notepad++.exe" -p "Applications\notepad++.exe" -r
+set_ico -e json -i D:\json.ico -a D:\notepad++.exe
 ```
 
 ## args
 
 ### extension
-for example `json` , `go` ,`rs`,`py`
+file extension. `json`
 ### ico
-ico file path. for example `"D:\json.ico"`
+ico file absolute path.  `D:\json.ico`
 ### app
-app file path. for example `"D:\notepad++.exe"`
-### ProgID
-find in `HKEY_CLASSES_ROOT\Applications\{ }` or `HKEY_CURRENT_USER\Software\Classes\Applications\{ }`
-
-default: `"Applications\notepad++.exe"`  
+app file absolute path. `D:\notepad++.exe`
 ### root
-default `false`
-if you want to write in `HKEY_CLASSES_ROOT`  
-plese switch **Administrator** and add `-r`
+if you want to write in `HKEY_CLASSES_ROOT`,please switch **Administrator** and add `-r`
+
+```powershell
+set_ico -e json -i D:\json.ico -a D:\notepad++.exe -r
+```
+
+## del icon cache
+
+if not effective please run `del_icon_cache.bat` to del icon cache
