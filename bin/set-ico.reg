@@ -5,25 +5,30 @@ Windows Registry Editor Version 5.00
 ; {file_type} {ico}
 [HKEY_CLASSES_ROOT\{file_type}\DefaultIcon]
 [HKEY_CURRENT_USER\Software\Classes\{file_type}\DefaultIcon]
+[HKEY_LOCAL_MACHINE\Software\Classes\{file_type}\DefaultIcon]
 @="{ico},0"
 ;--------------------
 ; {file_type} {app_path}
 [HKEY_CLASSES_ROOT\{file_type}\shell\open\command]
 [HKEY_CURRENT_USER\Software\Classes\{file_tyoe}\shell\open\command]
+[HKEY_LOCAL_MACHINE\Software\Classes\{file_tyoe}\shell\open\command]
 @=""{app_path}" "%1""
 ;--------------------
 ; {extension} {file_type}
 [HKEY_CLASSES_ROOT\.{extension}]
 [HKEY_CURRENT_USER\Software\Classes\.{extension}]
+[HKEY_LOCAL_MACHINE\Software\Classes\.{extension}]
 @="{file_type}"
 ; {extension} {ico}
 [HKEY_CLASSES_ROOT\.{extension}\DefaultIcon]
 [HKEY_CURRENT_USER\Software\Classes\.{extension}\DefaultIcon]
+[HKEY_LOCAL_MACHINE\Software\Classes\.{extension}\DefaultIcon]
 @="{ico},0"
 ;--------------------
 ; {app_name} {app_path}
 [HKEY_CLASSES_ROOT\Applications\{app_name}\shell\open\command]
 [HKEY_CURRENT_USER\Software\Classes\Applications\{app_name}\shell\open\command]
+[HKEY_LOCAL_MACHINE\Software\Classes\Applications\{app_name}\shell\open\command]
 @=""{app_path}" "%1""
 ;--------------------
 ; {extension} {app_name}

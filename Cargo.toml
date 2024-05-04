@@ -1,6 +1,6 @@
 [package]
 name = "set-ico"
-version = "1.1.0"
+version = "1.2.0"
 edition = "2021"
 authors = ["keating55"]
 description = "A utility to setting ico ICONS for different extension files."

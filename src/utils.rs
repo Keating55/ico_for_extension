@@ -10,14 +10,32 @@ pub struct IcoReg {
 }
 
 impl IcoReg {
-    ///HKEY_CLASSES_ROOT or HKEY_CURRENT_USER\Software\Classes
+    // check executable file extension
+    pub fn check_extension(&self) -> bool {
+        let white_extension = [
+            "bat", "bin", "cab", "cmd", "com", "cpl", "ex_", "exe", "gadget", "inf", "ins", "inx",
+            "isu", "job", "js", "jse", "lnk", "msc", "msi", "msp", "mst", "paf", "pif", "ps1",
+            "reg", "rgs", "scr", "sct", "shb", "shs", "u3p", "vb", "vbe", "vbs", "vbscript", "ws",
+            "wsf", "wsh",
+        ];
+        white_extension
+            .binary_search(&self.extension.as_str())
+            .is_ok()
+    }
+    ///HKEY_CLASSES_ROOT or HKEY_LOCAL_MACHINE\Software\Classes or HKEY_CURRENT_USER\Software\Classes
+    /// 
+    /// if you write values to a key under HKEY_CLASSES_ROOT, 
+    /// and the key already exists under HKEY_CURRENT_USER\Software\Classes, 
+    /// the system will store the information there instead of under HKEY_LOCAL_MACHINE\Software\Classes.
     fn get_root_reg(&self) -> RegKey {
         if self.root {
-            return RegKey::predef(HKEY_CLASSES_ROOT);
+            return RegKey::predef(HKEY_LOCAL_MACHINE)
+                .open_subkey(r#"Software\Classes"#)
+                .expect(r#"failed HKEY_LOCAL_MACHINE\Software\Classes"#);
         } else {
             return RegKey::predef(HKEY_CURRENT_USER)
                 .open_subkey(r#"Software\Classes"#)
-                .expect(r#"failed Software\Classes"#);
+                .expect(r#"failed HKEY_CURRENT_USER\Software\Classes"#);
         }
     }
     /// return custom_type {extension}file
@@ -35,28 +53,28 @@ impl IcoReg {
             .expect(&format!("failed {} set value {}", reg_key, reg_value));
     }
     /// ```reg
-    /// [HKEY_CLASSES_ROOT\{custom_type}\DefaultIcon]
+    /// [Software\Classes\{custom_type}\DefaultIcon]
     /// @="{ico},0"
     /// ```
     fn reg_type_defaulticon(&self) -> String {
         return format!(r#"{}\DefaultIcon"#, self.get_custom_type());
     }
     /// ```reg
-    /// [HKEY_CLASSES_ROOT\{custom_type}\shell\open\command]
-    /// @="\"{app}" \"%1\""
+    /// [Software\Classes\{custom_type}\shell\open\command]
+    /// @="\"{app_path}" \"%1\""
     /// ```
     fn reg_type_shell_open_command(&self) -> String {
         return format!(r#"{}\shell\open\command"#, self.get_custom_type());
     }
     /// ```reg
-    /// [HKEY_CLASSES_ROOT\.{extension}]
+    /// [Software\Classes\.{extension}]
     /// @="{custom_type}"
     /// ```
     fn reg_extension(&self) -> String {
         return format!(r#".{}"#, self.extension);
     }
     /// ```reg
-    /// [HKEY_CLASSES_ROOT\.{extension}\DefaultIcon]
+    /// [Software\Classes\.{extension}\DefaultIcon]
     /// @="{ico},0"
     /// ```
     fn reg_extension_defaulticon(&self) -> String {
@@ -73,8 +91,8 @@ impl IcoReg {
         );
     }
     /// ```reg
-    /// [HKEY_CURRENT_USER\Software\Classes\Applications\{}\shell\open\command]
-    /// @=""{name}" "%1""
+    /// [HKEY_CURRENT_USER\Software\Classes\Applications\{app_name}\shell\open\command]
+    /// @="{app_path}" "%1""
     /// ```
     fn reg_applications(&self) -> String {
         if self.root {
@@ -109,7 +127,7 @@ impl IcoReg {
         );
     }
 
-    pub fn set_applications(&self) {
+    pub fn set_create_applications(&self) {
         self.set_reg(
             &self.reg_applications(),
             "",
@@ -117,20 +135,18 @@ impl IcoReg {
         );
     }
     ///
-    /// 
+    ///
     pub fn set_default_open_app(&self) {
-        self.set_reg(&self.reg_userchoice(), "ProgId", &format!(r#"Applications\{}"#,self.name));
+        self.set_reg(
+            &self.reg_userchoice(),
+            "ProgId",
+            &format!(r#"Applications\{}"#, self.name),
+        );
     }
 
-    pub fn new(
-        extension: String,
-        ico: String,
-        app: String,
-        root: bool,
-        name: String,
-    ) -> IcoReg {
+    pub fn new(extension: String, ico: String, app: String, root: bool, name: String) -> IcoReg {
         IcoReg {
-            extension,
+            extension: extension.to_lowercase(),
             ico,
             app,
             root,

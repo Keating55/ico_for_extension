@@ -29,10 +29,10 @@ struct Cli {
     /// ico file absolute path
     #[arg(short = 'i', long)]
     ico: PathBuf,
-    /// app absolute path
+    /// app file absolute path
     #[arg(short = 'a', long)]
     app: PathBuf,
-    /// add `-r` will write in hkcr.  default write in hkcu
+    /// add `-r` (Administrator) will write in HKLM and HKCU.  default only write in HKCU
     #[arg(short = 'r', long, default_value = "false")]
     root: bool,
 }
@@ -49,8 +49,18 @@ fn main() {
         cli.root,
         cli.app.file_name().unwrap().to_str().unwrap().to_string(),
     );
+    if icoreg.check_extension() {
+        panic!("{} is executable file extension", icoreg.extension)
+    }
     icoreg.set_file_extision_type();
     icoreg.set_file_extision();
-    icoreg.set_applications();
+    icoreg.set_create_applications();
     icoreg.set_default_open_app();
+    if icoreg.root {
+        let icoreguser = IcoReg{root:false,..icoreg};
+        icoreguser.set_file_extision_type();
+        icoreguser.set_file_extision();
+        icoreguser.set_create_applications();
+        icoreguser.set_default_open_app();
+    }
 }
